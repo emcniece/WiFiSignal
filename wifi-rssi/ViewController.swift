@@ -33,7 +33,8 @@ class ViewController: UIViewController {
             for view in foregroundView.subviews {
                 for v in view.subviews {
                     if let statusBarWifiSignalView = NSClassFromString("_UIStatusBarWifiSignalView"), v .isKind(of: statusBarWifiSignalView) {
-                        if let val = v.value(forKey: "numberOfActiveBars") as? Int {
+                        //if let val = v.value(forKey: "numberOfActiveBars") as? Int {
+                        if let val = v.value(forKey: "wifiStrengthBars") as? Int {
                             numberOfActiveBars = val
                             break
                         }
@@ -62,10 +63,17 @@ class ViewController: UIViewController {
             
             for view in foregroundView.subviews {
                 if let statusBarDataNetworkItemView = NSClassFromString("UIStatusBarDataNetworkItemView"), view .isKind(of: statusBarDataNetworkItemView) {
-                    if let val = view.value(forKey: "wifiStrengthRaw3") as? Int {
+
+                    print("wifiStrengthRaw", view.value(forKey: "wifiStrengthRaw"))
+                    //print("_wifiStrengthRaw", view.value(forKey: "_wifiStrengthRaw"))
+                    print("wifiStrengthBars", view.value(forKey: "wifiStrengthBars"))
+                    print("_stringForRSSI", view.value(forKey: "_stringForRSSI"))
+                    
+                    if let val = view.value(forKey: "wifiStrengthRaw") as? Int {
                         rssi = val
                         break
                     }
+                    
                 }
             }
         }
@@ -76,11 +84,17 @@ class ViewController: UIViewController {
     }
     
     @IBAction func refresh(_ sender: UIButton) {
+        let numBars = getWiFiNumberOfActiveBars()
+        let rssi = getWiFiRSSI()
+        
+        label.text = "RSSI: \(rssi) | Bars: \(numBars)"
+        /*
         if let numberOfBars = getWiFiNumberOfActiveBars() {
             label.text = "WiFi number of bars: \(numberOfBars)"
         } else if let rssi = getWiFiRSSI() {
             label.text = "WiFi RSSI: \(rssi)"
         }
+        */
         //let a = getSignalStrength()
     }
     
